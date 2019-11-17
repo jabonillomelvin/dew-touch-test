@@ -7,22 +7,19 @@
 				<th>NAME</th>	
 			</tr>
 		</thead>
-		<tbody>
-			<?php foreach($records as $record):?>
-			<tr>
-				<td><?php echo $record['Record']['id']?></td>
-				<td><?php echo $record['Record']['name']?></td>
-			</tr>	
-			<?php endforeach;?>
-		</tbody>
+
 	</table>
 </div>
 <?php $this->start('script_own')?>
 <script>
 $(document).ready(function(){
-	$("#table_records").dataTable({
 
-	});
+	$('#table_records').DataTable( {
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "<?php echo $this->Html->Url(array('controller' => 'Record', 'action' => 'ajax')); ?>",
+
+    } );
 })
 </script>
 <?php $this->end()?>

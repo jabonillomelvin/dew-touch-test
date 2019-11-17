@@ -29,7 +29,7 @@
 										</tr>
 									</thead>
 									<tbody>
-									<?php foreach($order_reports as $k => $order_report):?>
+									<?php foreach($data_orders as $k => $order_report):?>
 										<tr class="item_tr" style="background-color:#fff;">
 											<td><span class="row-details row-details-close"></span></td>
 											<td colspan="2"><?php echo $k?></td>
@@ -40,19 +40,42 @@
 												<table style="width:100%">
 													<thead>
 														<tr>
-															<th style="border-left:none;width:50%">Part Name</th>
-															<th>Value</th>
+															<th style="border-left:none;width:50%">Dish</th>
+															<th>Quantity</th>
 														</tr>
 													</thead>
 													<tbody>
-													<?php foreach($order_report as $q => $val):?>
+													<?php foreach($order_report['dish'] as $q => $val):?>
+
 														<tr>
-															<td style="border-left:none;width:50%"><?php echo $q?></td>
-															<td><?php echo $val?></td>
+															<td style="border-left:none;width:50%"><?php echo $val['name'] ?></td>
+															<td><?php echo $val['quantity'] ?></td>
 														</tr>
 													<?php endforeach;?>
 													</tbody>
 												</table>
+
+                                                <?php foreach($order_report['ingredients'] as $q => $val):?>
+												<table style="width:100%">
+                                                    <thead>
+														<tr>
+															<th style="text-align:center" colspan='2'><?php echo $val['title']; ?></th>
+														</tr>
+													</thead>
+													<tbody>
+													    <tr>
+													        <td>Name</td>
+													        <td>Value</td>
+													    </tr>
+													    <?php foreach ($val['ingredient_name'] as $ingredient) :  ?>
+													    <tr>
+													        <td style="width:50%"><?php echo $ingredient['name']; ?></td>
+													        <td><?php echo $ingredient['value']; ?></td>
+													    </tr>
+													    <?php endforeach; ?>
+													</tbody>
+												</table>
+												<?php endforeach; ?>
 											</td>
 										</tr>
 									<?php endforeach;?>

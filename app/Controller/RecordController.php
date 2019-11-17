@@ -1,20 +1,24 @@
 <?php
 	class RecordController extends AppController{
-		
-		public function index(){
-			ini_set('memory_limit','256M');
-			set_time_limit(0);
-			
+		public $components = array('Paginator', 'DataTable');
+
+        public function index(){
 			$this->setFlash('Listing Record page too slow, try to optimize it.');
-			
-			
-			$records = $this->Record->find('all');
-			
-			$this->set('records',$records);
-			
-			
+
 			$this->set('title',__('List Record'));
 		}
+
+        /**
+         * @return false|string
+         */
+		public function ajax()
+        {
+            $this->autoRender = false;
+            $this->DataTable->fields = array('Record.id','Record.name');
+            $this->Record->recursive = -1;
+
+            return json_encode($this->DataTable->getResponse($this, $this->Record));
+        }
 		
 		
 // 		public function update(){
