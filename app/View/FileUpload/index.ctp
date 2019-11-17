@@ -13,8 +13,13 @@
 		<h3>Import Form</h3>
 	</div>
 <?php
-echo $this->Form->create('FileUpload');
-echo $this->Form->input('file', array('label' => 'File Upload', 'type' => 'file'));
+echo $this->Form->create('FileUpload', ['type' => 'file', 'url' => ['controller' => 'FileUpload', 'action' => 'index']]);
+echo $this->Form->input('FileUpload.file', array('label' => 'File Upload', 'type' => 'file'));
+
+    if (!empty($error)) {
+        echo "<p style='color:red'>" . $error . "</p>";
+    }
+
 echo $this->Form->submit('Upload', array('class' => 'btn btn-primary'));
 echo $this->Form->end();
 ?>

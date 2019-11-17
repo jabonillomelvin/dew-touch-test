@@ -2,17 +2,32 @@
 	class OrderReportController extends AppController{
 
 		public function index(){
-
+            $data = [];
 			$this->setFlash('Multidimensional Array.');
 
 			$this->loadModel('Order');
-			$orders = $this->Order->find('all',array('conditions'=>array('Order.valid'=>1),'recursive'=>2));
-			// debug($orders);exit;
-
 			$this->loadModel('Portion');
-			$portions = $this->Portion->find('all',array('conditions'=>array('Portion.valid'=>1),'recursive'=>2));
-			// debug($portions);exit;
+			$orders = $this->Order->find('all', array('conditions'=>array('Order.valid'=>1),'recursive'=>2));
 
+			foreach ($orders as $order) {
+			    foreach ($order['OrderDetail'] as $key => $detail) {
+			        $data[$order['Order']['name']]['dish'][] = [
+			            'name' => $detail['Item']['name'],
+                        'quantity' => $detail['quantity']
+                    ];
+			        $portions = $this->Portion->find('first',array('conditions'=>array('Portion.valid'=>1, 'Item.id' => $detail['Item']['id']),'recursive'=>2));
+			        $data[$order['Order']['name']]['ingredients'][$key] = [
+			            'title' => 'Ingredient of ' . $detail['Item']['name'],
+
+                    ];
+			        foreach ($portions['PortionDetail'] as $portion) {
+			            $data[$order['Order']['name']]['ingredients'][$key]['ingredient_name'][] = [
+			                'name' => $portion['Part']['name'],
+                            'value' => number_format((float)$portion['value'] * $detail['quantity'], 2, '.', '')
+                        ];
+                    }
+                }
+            }
 
 			// To Do - write your own array in this format
 			$order_reports = array('Order 1' => array(
@@ -34,7 +49,7 @@
 								);
 
 			// ...
-
+            $this->set('data_orders', $data);
 			$this->set('order_reports',$order_reports);
 
 			$this->set('title',__('Orders Report'));
